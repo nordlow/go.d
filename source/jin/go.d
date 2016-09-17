@@ -16,7 +16,7 @@ public import vibe.core.concurrency;
 /// vibe.core.core.yield works not correctly
 alias yield = vibe.core.concurrency.yield;
 
-/// Run function asynchronously
+/// Run function `task` asynchronously
 auto go(alias task, Args...)(auto ref Args args)
     if (is(ReturnType!task : void)
         && (Parameters!task.length == Args.length))
@@ -24,7 +24,7 @@ auto go(alias task, Args...)(auto ref Args args)
     return runWorkerTaskH(&task, args);
 }
 
-/// Run function asynchronously and return channel connectetd with range returned by function
+/// Run function `task` asynchronously and return channel connected with range returned by function
 auto go(alias task, Args...)(auto ref Args args)
     if (isInputRange!(ReturnType!task))
 {
@@ -43,7 +43,7 @@ auto go(alias task, Args...)(auto ref Args args)
     return future;
 }
 
-/// Run function with autocreated result channel and return this channel
+/// Run function `task` with autocreated result channel and return this channel
 auto go(alias task, Args...)(auto ref Args args)
     if ((Parameters!task.length == Args.length + 1) &&
         (is(Parameters!task[0] == Channel!Message, Message)))
@@ -54,7 +54,7 @@ auto go(alias task, Args...)(auto ref Args args)
     return future;
 }
 
-/// Cut and return head from input range;
+/// Cut `range` and return head.
 auto next(Range)(auto ref Range range)
     if (isInputRange!Range)
 {
@@ -63,14 +63,14 @@ auto next(Range)(auto ref Range range)
     return value;
 }
 
-/// Put to output range
+/// Put `value` to output range `range`.
 auto next(Range, Value)(auto ref Range range, Value value)
     if (isOutputRange!(Range, Value))
 {
     return range.put(value);
 }
 
-/// Wait-free one input one output queue
+/// Wait-Free One-Input-One-Output (Single-Producer-Single-Consumer SPSC) Queue.
 class Channel(Message)
 {
     /// Allow transferring between tasks
