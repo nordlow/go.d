@@ -7,24 +7,28 @@ import jin.go;
 enum int iterations = 1000;
 enum int threads = 1000;
 
-void main( )
+void main()
 {
-	StopWatch timer;
-	timer.start();
+    StopWatch timer;
+    timer.start();
 
-	struct Data {
-		int value;
-	}
+    struct Data
+    {
+        int value;
+    }
 
-	static auto writing( ) {
-		return iterations.iota.map!Data;
-	}
+    static auto writing()
+    {
+        return iterations.iota.map!Data;
+    }
 
-	auto inputs = threads.iota.map!( i => go!writing ).array.Inputs!Data;
+    auto inputs = threads.iota.map!(i => go!writing).array.Inputs!Data;
 
-	foreach( i ; inputs ) {}
+    foreach (i; inputs)
+    {
+    }
 
-	timer.stop();
+    timer.stop();
 
-	writeln( "jin.go: " , timer.peek.msecs );
+    writeln("jin.go: ", timer.peek.msecs);
 }
