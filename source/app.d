@@ -7,15 +7,39 @@ import jin.go;
 
 import vibe.core.core : workerThreadCount;
 
+void testFiberCalls()
+{
+}
+
+void testCalls(int taskCount = 10_000)
+{
+    StopWatch timer;
+    timer.start();
+
+    static auto writing()
+    {
+        // writeln(Thread.getThis().id);
+    }
+
+    auto inputs = taskCount.iota.map!(i => go!writing).array;
+    // foreach (i; inputs)
+    // {
+    //     writeln(i);
+    // }
+
+    timer.stop();
+
+    writeln("jin.go: ", timer.peek.msecs);
+}
+
 /** Benchmark function that will send `dataCount` number of messages from
     `taskCount` number of tasks.
 */
-void main()
+void testCollection(int taskCount = 1_000)
 {
-    writeln(workerThreadCount);
+    writeln("workerThreadCount:", workerThreadCount);
 
     enum int dataCount = 1_000;
-    enum int taskCount = 1_000;
 
     StopWatch timer;
     timer.start();
@@ -43,4 +67,10 @@ void main()
     timer.stop();
 
     writeln("jin.go: ", timer.peek.msecs);
+}
+
+void main()
+{
+    testCalls();
+    testCollection();
 }
