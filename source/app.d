@@ -5,13 +5,17 @@ import std.stdio;
 import std.concurrency : Thread;
 import jin.go;
 
+import vibe.core.core : workerThreadCount;
+
 /** Benchmark function that will send `dataCount` number of messages from
     `taskCount` number of tasks.
 */
 void main()
 {
-    enum int dataCount = 1000;
-    enum int taskCount = 1000;
+    writeln(workerThreadCount);
+
+    enum int dataCount = 1_000;
+    enum int taskCount = 1_000;
 
     StopWatch timer;
     timer.start();
@@ -21,9 +25,9 @@ void main()
         int value;
     }
 
-    static auto nothrow writing()
+    static auto writing() @safe pure nothrow @nogc
     {
-        Thread.getThis();
+        // writeln(Thread.getThis().id);
         return dataCount.iota.map!Data;
     }
 
@@ -33,7 +37,7 @@ void main()
                            .Inputs!Data;
     foreach (i; inputs)
     {
-        writeln(i);
+        // writeln(i);
     }
 
     timer.stop();
