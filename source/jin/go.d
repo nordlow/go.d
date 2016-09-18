@@ -16,7 +16,7 @@ public import vibe.core.concurrency;
 /// vibe.core.core.yield works not correctly
 alias yield = vibe.core.concurrency.yield;
 
-/// Run function `task` asynchronously
+/// Run void-returning function `task` asynchronously.
 auto go(alias task, Args...)(auto ref Args args)
     if (is(ReturnType!task : void)
         && (Parameters!task.length == Args.length))
